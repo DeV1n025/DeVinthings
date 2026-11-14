@@ -1,0 +1,49 @@
+:root {
+  --bg: #0b1220;
+  --panel: rgba(255,255,255,0.06);
+  --panel2: rgba(255,255,255,0.10);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.70);
+  --stroke: rgba(255,255,255,0.14);
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  --accent: #21c29b;
+  --accent-hover: #18a984;
+  --bg-glow: #1a2a55;
+  --bg-glow-alt: #2a1f66;
+  --toolbar-bg-start: rgba(11,18,32,0.9);
+  --toolbar-bg-end: rgba(11,18,32,0.65);
+  --toolbar-border: rgba(255,255,255,0.24);
+  --toolbar-shadow: 0 4px 16px rgba(0,0,0,0.28);
+  --button-bg: rgba(255,255,255,0.08);
+  --button-hover: rgba(255,255,255,0.16);
+  --button-border: var(--stroke);
+  --button-radius: 8px;
+  --button-padding: 8px 14px;
+  --card-bg: rgba(255,255,255,0.08);
+  --thumb-bg: rgba(0,0,0,0.25);
+  --radius: 14px;
+  --radius2: 12px;
+}
+
+:root[data-theme="light"] {
+  --bg: #e9edef;
+  --panel: rgba(255,255,255,0.78);
+  --panel2: #f3f5f6;
+  --text: #18252b;
+  --muted: rgba(24,37,43,0.68);
+  --stroke: rgba(24,37,43,0.18);
+  --shadow: 0 10px 30px rgba(24,37,43,0.14);
+  --accent: #168f73;
+  --accent-hover: #10745d;
+  --bg-glow: #f1f3f4;
+  --bg-glow-alt: #e1e7ea;
+  --toolbar-bg-start: rgba(233,237,239,0.96);
+  --toolbar-bg-end: rgba(233,237,239,0.82);
+  --toolbar-border: rgba(24,37,43,0.28);
+  --toolbar-shadow: 0 4px 16px rgba(24,37,43,0.18);
+  --button-bg: rgba(24,37,43,0.06);
+  --button-hover: rgba(24,37,43,0.12);
+  --button-border: var(--stroke);
+  --card-bg: rgba(255,255,255,0.92);
+  --thumb-bg: rgba(24,37,43,0.08);
+}

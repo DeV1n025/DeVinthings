@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DeVinThings Toolbar</title>
+  <link rel="stylesheet" href="theme.css" />
+  <script src="language.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, var(--toolbar-bg-start), var(--toolbar-bg-end));
+      border-bottom: 1px solid var(--toolbar-border);
+      box-shadow: var(--toolbar-shadow);
+    }
+
+    .toolbar-inner {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      display: block;
+      flex-shrink: 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .home-button {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: var(--button-padding);
+      border: 1px solid var(--button-border);
+      border-radius: var(--button-radius);
+      background: var(--button-bg);
+      color: var(--text);
+      font: inherit;
+      text-decoration: none;
+    }
+
+    .home-button:hover,
+    .home-button:focus-visible {
+      background: var(--button-hover);
+    }
+
+    .theme-button {
+      width: 38px;
+      height: 38px;
+      padding: 8px;
+      border: 1px solid var(--button-border);
+      border-radius: var(--button-radius);
+      background: var(--button-bg);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .toolbar-controls {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .language-button {
+      min-width: 38px;
+      height: 38px;
+      padding: 0 8px;
+      border: 1px solid var(--button-border);
+      border-radius: var(--button-radius);
+      background: var(--button-bg);
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .theme-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+
+    .theme-button:hover,
+    .theme-button:focus-visible {
+      background: var(--button-hover);
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar-inner">
+      <div class="brand">
+        <a href="index.html" data-i18n-aria-label="homeOpen" aria-label="Home öffnen">
+          <img class="logo-icon" src="logo.svg" alt="DeVinThings Logo">
+        </a>
+        <div class="hint">DeVinThings</div>
+      </div>
+      <a class="home-button" href="index.html" data-i18n="home">Home</a>
+      <div class="toolbar-controls">
+        <button class="language-button" type="button" aria-label="Switch to English">EN</button>
+        <button class="theme-button" type="button" aria-label="Zum Hellmodus wechseln" aria-pressed="false">
+          <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g class="theme-icon-path"></g>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <script>
+    (function () {
+      const themeButton = document.querySelector('.theme-button');
+      const languageButton = document.querySelector('.language-button');
+      const themeIconPath = document.querySelector('.theme-icon-path');
+      const storedTheme = localStorage.getItem('theme') || 'dark';
+      const sunPath = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
+      const moonPath = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>';
+
+      function setTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        const isDark = theme === 'dark';
+        themeIconPath.innerHTML = isDark ? sunPath : moonPath;
+        themeButton.setAttribute('aria-label', Language.translate(isDark ? 'switchToLight' : 'switchToDark', Language.get()));
+        themeButton.setAttribute('aria-pressed', theme === 'light');
+        localStorage.setItem('theme', theme);
+        window.parent.postMessage({ type: 'theme-change', theme }, '*');
+        try {
+          if (window.parent !== window) {
+            window.parent.document.documentElement.dataset.theme = theme;
+          }
+        } catch (error) {
+        }
+      }
+
+      setTheme(storedTheme);
+
+      function setLanguage(language) {
+        Language.set(language);
+        languageButton.textContent = language === 'de' ? 'EN' : 'DE';
+        languageButton.setAttribute('aria-label', Language.translate(language === 'de' ? 'switchToEnglish' : 'switchToGerman', language));
+        setTheme(document.documentElement.dataset.theme);
+        window.parent.postMessage({ type: 'language-change', language: language }, '*');
+      }
+
+      setLanguage(Language.get());
+
+      const toolbar = document.querySelector('.toolbar');
+      function sendToolbarHeight() {
+        const height = Math.ceil(toolbar.getBoundingClientRect().height);
+        try {
+          if (window.frameElement) {
+            window.frameElement.style.height = height + 'px';
+          }
+        } catch (error) {
+        }
+        window.parent.postMessage({
+          type: 'toolbar-height',
+          height: height
+        }, '*');
+      }
+
+      new ResizeObserver(sendToolbarHeight).observe(toolbar);
+      sendToolbarHeight();
+
+      window.addEventListener('message', function (event) {
+        if (!event.data || event.data.type !== 'theme-state') return;
+        if (event.data.theme !== 'light' && event.data.theme !== 'dark') return;
+        setTheme(event.data.theme);
+      });
+
+      window.addEventListener('message', function (event) {
+        if (!event.data || event.data.type !== 'language-state') return;
+        if (event.data.language !== 'de' && event.data.language !== 'en') return;
+        setLanguage(event.data.language);
+      });
+
+      languageButton.addEventListener('click', function () {
+        setLanguage(Language.get() === 'de' ? 'en' : 'de');
+      });
+
+      themeButton.addEventListener('click', function () {
+        setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
+    })();
+  </script>
+</body>
+</html>

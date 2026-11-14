@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">DeVinThings Logo</title>
+  <desc id="desc">Grünes D als Logo</desc>
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <path d="M18 14h12c11 0 18 7 18 18s-7 18-18 18H18V14Zm11 9h-2v18h2c5 0 9-3 9-9s-4-9-9-9Z" fill="#21c29b"/>
+</svg>
